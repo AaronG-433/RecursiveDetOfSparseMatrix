@@ -1,0 +1,233 @@
+//including the Node class
+class Node {
+    public Node next;      //includes a reference to next Node
+    public int col;        //matrix column where Node is located
+    public int data;       //data contained in Node
+
+    //defining the Node class
+    public Node(int col, int data)
+    {
+        this.col=col;
+        this.data=data;
+        this.next=null;
+    }
+}
+
+
+public class LinkedList {
+
+    private Node head;
+    private Node tail;
+    private int size;
+
+    public LinkedList()
+    {
+        this.head=null;
+        this.tail=null;
+        this.size=0;
+    }
+
+    //returns the head Node
+    public Node getHead()
+    {
+        return this.head;
+    }
+
+    //changes the head Node
+    public void setHead(Node head)
+    {
+        this.head=head;
+    }
+
+    //returns the tail Node
+    public Node getTail()
+    {
+        return this.tail;
+    }
+
+    //changes the tail Node
+    public void setTail(Node tail)
+    {
+        this.tail=tail;
+    }
+
+    //returns the max size of the LL
+    public int getSize()
+    {
+        return size;
+    }
+
+    //changes the max size of the LL
+    public void setSize(int size)
+    {
+        this.size=size;
+    }
+
+    //adds a new value to the LL from smallest to largest column
+    public void add(int col, int data)
+    {
+        Node node = new Node(col,data);
+        if(head==null)                     //check if head is null
+        {
+            head=node;
+            tail=node;
+            return;
+        }
+        else if(tail.col < col)              //check if new node is past farthest nonzero column
+        {
+            tail.next=node;
+            tail=node;
+            return;
+        }
+        else                                //add the new node to the ordered columns
+        {
+            Node curr = head;
+            Node prev = head;
+            while (curr != null)
+            {
+                if(curr.col == col)             //check if there's already a value in row/col
+                {
+                    curr.data=data;     //replace data with new value
+                    return;
+                }
+                else if(curr.col > col)         //check if new column is smaller than the next
+                {
+                    if(head.next == null)
+                    {
+                        head=node;              //push back head value
+                        head.next=curr;
+                        tail=head.next;
+                        return;
+                    }
+                    else
+                    {
+                        prev.next=node;
+                        node.next=curr;
+                        return;
+                    }
+                }
+                prev = curr;
+                curr=curr.next;
+            }
+        }
+    }
+
+    //removes one element in the LL
+    public void remove(int col)
+    {
+        Node temp = head;
+        Node prev = head;
+        while(temp != null)
+        {
+            if(temp.col==col)
+            {
+                if(temp.next == null)           //in case only one value in row
+                {
+                    head = null;
+                    return;
+                }
+                prev.next=temp.next;
+            }
+            prev=temp;
+            temp=temp.next;
+        }
+    }
+
+    //clear the linked LL
+    public void clear()
+    {
+        head=null;
+    }
+
+    //adds all the elements of LL to a string
+    public String print()
+    {
+        String temp="";
+        Node node=head;
+        for(int i=0; i<size; i++) {
+            if( (node!=null) && (node.col==i) )             //if the node col matches, add the value to the string and go to next node
+            {
+                temp += node.data + "\t";
+                node = node.next;
+            }
+            else
+            {
+                temp += "0\t";             //column is empty so add a 0
+            }
+        }
+        return temp;
+    }
+
+    //adds only nonzero elements to a string in the form "row column data"
+    public String toString(int row)
+    {
+        String temp="";
+        Node node=head;
+        for(int i=0; i<size; i++) {
+            if( (node!=null) && (node.col==i) )             //if the node col matches, add the value to the string and go to next node
+            {
+                temp += row + " " + node.col + " " + node.data + "\n";
+                node = node.next;
+            }
+        }
+        return temp;
+    }
+
+    //returns the value of an element at a specific location
+    public int getElement(int col)
+    {
+        int x=0;
+        Node node = head;
+        for(int i=0; i<size; i++) {
+            if( (node!=null) && (node.col==i) )             //if the node col matches, add the value to the string and go to next node
+            {
+                x = node.data;
+            }
+        }
+        return x;
+    }
+
+    //removes values in a col and reduces the column of those past it
+    //creates a new LL that is the minor of the original
+    public LinkedList minor(int col)
+    {
+        LinkedList minor = new LinkedList();
+        Node minorNode = minor.head;
+        Node node = head;
+        while(node != null)
+        {
+            if(node.col < col)              //if column is less than removed column then add node to minor LL
+            {
+                if(minor.head == null)      //check if head is null
+                {
+                    minor.head=new Node(node.col,node.data);
+                    minorNode=minor.head;
+                }
+                else
+                {
+                    minorNode.next=new Node(node.col,node.data);
+                    minorNode = minorNode.next;
+                }
+            }
+            else if(node.col > col)         //if column is greater than removed column then reduce column # by 1 then add to minor LL
+            {
+                if(minor.head == null)
+                {
+                    minor.head=new Node(node.col,node.data);
+                    minor.head.col=minor.head.col-1;
+                    minorNode=minor.head;
+                }
+                else
+                {
+                    minorNode.next=new Node(node.col,node.data);
+                    minorNode=minorNode.next;
+                    minorNode.col=minorNode.col-1;      //reduce column #
+                }
+
+            }
+            node=node.next;
+        }
+        return minor;
+    }
+
+}
