@@ -1,0 +1,140 @@
+
+
+public class SparseMatrix implements SparseInterface
+{
+    private LinkedList[] list;
+    private int size;
+
+    SparseMatrix()
+    {
+        setSize(5);
+    }
+
+    @Override
+    //removes all elements in a matrix
+    public void clear()
+    {
+        for(int i=0; i<size; i++)
+        {
+            list[i].clear();
+        }
+    }
+
+    @Override
+    //sets max size of the matrix
+    //also clears current matrix
+    public void setSize(int size)
+    {
+        this.size=size;
+        list = new LinkedList[size];
+        for(int i=0; i<size; i++)
+        {
+            list[i]=new LinkedList();
+            list[i].setSize(size);
+        }
+    }
+
+    @Override
+    //adds new element to the
+    //Throws error if out of bounds
+    public void addElement(int row, int col, int data)
+    {
+        if( (row>=size) || (col>=size))
+        {
+            System.out.println("ERROR: out of bounds of matrix.");
+            return;
+        }
+        else
+        {
+            list[row].add(col,data);
+        }
+    }
+
+    @Override
+    //removes an element from the matrix
+    //Throws an error if out of bounds
+    public void removeElement(int row, int col)
+    {
+        if( (row>=size) || (col>=size))
+        {
+            System.out.println("ERROR: out of bounds of matrix.");
+            return;
+        }
+        else
+        {
+            list[row].remove(col);
+        }
+    }
+
+    @Override
+    //returns the value of an element
+    //Throws an error if out of bounds
+    public int getElement(int row, int col)
+    {
+        if( (row>=size) || (col>=size))
+        {
+            System.out.println("ERROR: out of bounds of matrix.");
+            return -1;
+        }
+        else
+        {
+            return list[row].getElement(col);
+        }
+    }
+
+    @Override
+    //
+    public int determinant()
+    {
+        return 0;                                                                            //////////////DO
+    }
+
+    @Override
+    //Returns a new matrix which is the minor of the original
+    public SparseInterface minor(int row, int col)
+    {
+        SparseMatrix minor = new SparseMatrix();
+        minor.setSize(size-1);                      //set the minor dimensions to be one less than it's parent matrix
+        int j = 0;        //minor matrix row counter
+        for(int i=0; i<(size); i++)
+        {
+            if(i != row)
+            {
+                minor.list[j] = list[i].minor(col);
+                j++;
+            }
+        }
+        minor.print();
+        return minor;
+    }
+
+    @Override
+    //makes a string of nonzero matrix elements in the form "row column data"
+    public String toString()
+    {
+        String temp="";
+        for(int i=0; i<size; i++)
+        {
+            temp += list[i].toString(i);
+        }
+        return temp;
+    }
+
+    @Override
+    //returns the number of rows/columns in the matrix
+    public int getSize()
+    {
+        return this.size;
+    }
+
+    //makes a string of nonzero matrix elements in the form "row column data"
+    public void print()
+    {
+        String temp="";
+        for(int i=0; i<size; i++)
+        {
+            temp += list[i].print() + "\n";
+        }
+        System.out.println(temp);
+    }
+}
