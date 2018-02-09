@@ -1,0 +1,28 @@
+public class Main {
+    public static void main(String[] args) {
+
+        SparseMatrix test = new SparseMatrix();
+        test.addElement(4,2,6);
+        test.addElement(2,1,1);
+        test.addElement(3,4,5);
+        test.print();
+        test.addElement(1, 2,22);
+        test.addElement(0,0,10);
+        test.addElement(1,0,23);
+        test.print();
+        test.addElement(3,3,3);
+        test.addElement(4,4,9);
+        test.print();
+
+
+       // test.addElement(0,4,7);
+//        test.print();
+//        System.out.println(test.getElement(0,0));       //getElement
+//        System.out.println(test.toString());
+//        test.removeElement(0,0);
+//        test.removeElement(2,1);
+//        System.out.println(test.getElement(6,0));
+//        System.out.println(test.toString());
+//        test.print();
+    }
+}
