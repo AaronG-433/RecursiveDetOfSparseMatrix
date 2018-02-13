@@ -83,18 +83,36 @@ public class SparseMatrix implements SparseInterface
     }
 
     @Override
-    //
+    //Returns the determinant of the matrix calculated recursively
     public int determinant()
     {
-        return 0;                                                                            //////////////DO
+        if(size==1)
+        {
+            return list[0].getElement(0);
+        }
+        int det=0;
+        int j=0;
+        Node node = list[0].getHead();
+        while(node != null)
+        {
+            det+=(int)Math.pow(-1,node.col)*(node.data)*minor(0,node.col).determinant();
+            node=node.next;
+        }
+        return det;                                                                            //////////////DO
     }
 
     @Override
     //Returns a new matrix which is the minor of the original
     public SparseInterface minor(int row, int col)
     {
+
         SparseMatrix minor = new SparseMatrix();
         minor.setSize(size-1);                      //set the minor dimensions to be one less than it's parent matrix
+        if( (row>=size) || (col>=size))
+        {
+            System.out.println("ERROR: out of bounds of matrix.");
+            return minor;
+        }
         int j = 0;        //minor matrix row counter
         for(int i=0; i<(size); i++)
         {
@@ -104,7 +122,6 @@ public class SparseMatrix implements SparseInterface
                 j++;
             }
         }
-        minor.print();
         return minor;
     }
 
