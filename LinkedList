@@ -112,23 +112,28 @@ public class LinkedList {
         }
     }
 
-    //removes one element in the LL
+    //removes one element in the LL if it exists
     public void remove(int col)
     {
         Node temp = head;
         Node prev = head;
-        while(temp != null)
+        if(col > tail.col)          //if desired col is past last col, return
         {
-            if(temp.col==col)
+            return;
+        }
+        while(temp != null)         //check if row is null
+        {
+            if(temp.col==col)           //check if col matches desired
             {
-                if(temp.next == null)           //in case only one value in row
+                if(temp.next == null)           //in case last value in row
                 {
-                    head = null;
+                    prev.next = null;
                     return;
                 }
-                prev.next=temp.next;
+                prev.next=temp.next;            //if middle value being removed
+                return;
             }
-            prev=temp;
+            prev=temp;          //change to next nodes
             temp=temp.next;
         }
     }
@@ -193,6 +198,7 @@ public class LinkedList {
     {
         LinkedList minor = new LinkedList();
         Node minorNode = minor.head;
+        minor.setSize(size-1);
         Node node = head;
         while(node != null)
         {
